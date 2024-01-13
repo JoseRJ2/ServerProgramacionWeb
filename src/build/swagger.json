@@ -1,0 +1,2102 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "REST API proyectoUTM",
+        "description": "<html><body>Esta es la documentación de la API para el sistema informatico.<p>Para poder usar esta API es necesario solicitar el token y con esto poder utilizar los servicios proporcionados.</p><br><p><b>Autenticación y token de API</b></p><p>El sistema proporciona elapi-token. Una vez que haya creado y confirmado su cuenta.</p></body></html>",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "",
+    "tags": [
+        {
+            "name": "Usuarios",
+            "description": "API para obtener,modificar,crear y eliminar información de los usuarios del sistema"
+        },
+        {
+            "name": "Clientes",
+            "description": "API para obtener,modificar,crear y eliminar información de los clientes del sistema"
+        },
+        {
+            "name": "Roles",
+            "description": "API para obtener,modificar,crear y eliminar información de los roles que tendran los usuarios dentro del sistema"
+        },
+        {
+            "name": "Productos",
+            "description": "API para obtener,modificar,crear y eliminar información de los productos que se venderan dentro del sistema"
+        },
+        {
+            "name": "Tallas",
+            "description": "API para obtener,modificar,crear y eliminar información de las tallas de los productos que se venderan dentro del sistema"
+        },
+        {
+            "name": "Ventas",
+            "description": "API para obtener,modificar,crear y eliminar información de las ventas de los productos que ya se vendieron dentro del sistema"
+        },
+        {
+            "name": "Carritos",
+            "description": "API para obtener,modificar,crear y eliminar información de los carritos de compra dentro del sistema"
+        },
+        {
+            "name": "Estados",
+            "description": "API para obtener,modificar,crear y eliminar informacion de los estados de pago de los carritos de compra dentro del sistema"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/carritos/listarcarrito/{id}": {
+            "get": {
+                "tags": ["Carritos"],
+                "summary": "Servicio que lista todos los productos de un carrito en especifico",
+                "description": "Este servicio requiere como parametro el ID del carrito que se desea obtener, si se encuentra el carrito se muestra en pantalla todos los productos que contiene el carrito, la cantidad del producto, el modelo del producto y el estado en el que se encuentra actualmente el carrito, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "estado": "Pagado",
+                                    "nombre": "Vestido Rojo",
+                                    "modelo": "Corto",
+                                    "precio": 500
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ListarCarrito"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/carritos/cancelarcarrito": {
+            "post": {
+                "summary": "Servicio para cancelar un carrito de compras",
+                "operationId": "cancelar",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Cancelar un carrito",
+                        "in": "body",
+                        "description": "Este servicio nos permite poner en un carrito existente el estado de cancelado, para que no se pueda realizar la compra ademas de que todos los productos que se habian agregado al carrito se devuelven a la cantidad que tenian antes de que se agregaran al carrito",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/CancelarCarrito"
+                        }
+                    }
+                ],
+                "tags": ["Carritos"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "idCarrito": 1
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carritos/pagarcarrito": {
+            "post": {
+                "summary": "Servicio que realiza el pago del carrito ",
+                "description": "Este servicio recibe como parametro el ID del carrito, el descuento que se le hara a la cantidad total de los productos, tambien recibe la fecha de compra, este servicio nos permite pagar un carrito, para poder pagar un carrito es necesario que el carrito este creado y que el estado del carrito sea pendiente, una vez que se paga el carrito el estado cambia a pagado, ademas de que se genera una venta automaticamente al pagar el carrito, tambien se inserta un nuevo pago de carrito por tanto ya no realize el metodo de create en pago de carritos.",
+                "operationId": "create1",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Paga  un carrito",
+                        "in": "body",
+                        "description": "...",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoPagoCarrito"
+                        }
+                    }
+                ],
+                "tags": ["Carritos"],
+                "responses": {
+                    "200": {
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "idCarrito": 1,
+                                    "descuento": 0,
+                                    "fecha": "2020-05-20"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carritos/agregar": {
+            "post": {
+                "summary": "Servicio para agregar un producto a un carrito",
+                "operationId": "create2",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Agregar producto a un carrito",
+                        "in": "body",
+                        "description": "Esta funcion nos permite agregar productos a un carrito ya existente, para poder realizar la compra, es necesario que el carrito este creado y que el producto tambien este creado, ademas de que la cantidad del producto que se solicita sea menor o igual a la cantidad que se tiene en existencia, este metodo no solo agrega productos al carrito, tambien actualiza la nueva cantidad del producto despues de que se agrego al carrito.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevocarritoProducto"
+                        }
+                    }
+                ],
+                "tags": ["Carritos"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "idCarrito": 1,
+                                    "idProducto": 1,
+                                    "cantidad": 1
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/estados/delete/{id}": {
+            "delete": {
+                "tags": ["Estados"],
+                "summary": "Servicio que elimina un estado de pago en especifico",
+                "description": "Este servicio requiere como parametro el ID del estado de pago, si el ID se encuentra se elimina, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/estados/update/{id}": {
+            "put": {
+                "summary": "Servicio que actualiza la informacion de un estado de pago en especifico",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del estado que queremos actualizar",
+                        "requiered": true,
+                        "default": 2
+                    },
+                    {
+                        "name": "Estados",
+                        "in": "body",
+                        "description": "Este servicio requiere como parametro el ID del estado de pago que se desea actualizar, si se encuentra el estado de pago se muestran los campos que debes modificar, toma en cuenta que todos los campos se actualizaran con la informacion que ingreses o que este por defecto.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoEstado"
+                        }
+                    }
+                ],
+                "tags": ["Estados"],
+                "responses": {
+                    "201": {
+                        "description": "Exitoso"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/estados/{id}": {
+            "get": {
+                "tags": ["Estados"],
+                "summary": "Servicio que obtiene un estado de pago en especifico",
+                "description": "Este servicio requiere como parametro el ID del estado de pago que se desea obtener, si se encuentra el estado de pago se muestra en pantalla, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "estado": "Pagado"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Estado"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/estados/create": {
+            "post": {
+                "summary": "Servicio que agrega un nuevo estado de pago al sistema",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Estados",
+                        "in": "body",
+                        "description": "Este servicio nos permite agregar un nuevo estado de pago al sistema, para poder agregar un estado de pago es necesario que el usuario rellene el campo del estado de pago.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoEstado"
+                        }
+                    }
+                ],
+                "tags": ["Estados"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "estado": "Pagado"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/estados": {
+            "get": {
+                "tags": [
+                    "Estados"
+                ],
+                "summary": "Servicio que muestra todos los estados del pago presentes dentro del sistema.",
+                "description": "Este servicio no requiere ningun parametro, solo ejecutar el servicio y se mostraran todos los estados de pago que existen en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "estado": "Pagado"
+                                },
+                                {
+                                    "id": 2,
+                                    "estado": "Pendiente"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Estados"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carritos/delete/{id}": {
+            "delete": {
+                "tags": ["Carritos"],
+                "summary": "Servicio que elimina un carrito en especifico",
+                "description": "Este servicio requiere como parametro el ID del carrito que se desea eliminar, si se encuentra el carrito se elimina, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/carritos/update/{id}": {
+            "put": {
+                "summary": "Servicio que actualiza la informacion de un carrito en especifico",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Este servicio requiere de parametros el ID del carrito a modificar, si se encuentra el carrito se muestran los campos que debes modificar, toma en cuenta que todos los campos se actualizaran con la informacion que ingreses o que este por defecto.",
+                        "requiered": true,
+                        "default": 2
+                    },
+                    {
+                        "name": "Carrito",
+                        "in": "body",
+                        "description": "Metodo que actualiza un Carrito en especifico",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoCarrito"
+                        }
+                    }
+                ],
+                "tags": ["Carritos"],
+                "responses": {
+                    "201": {
+                        "description": "Exitoso"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carritos/{id}": {
+            "get": {
+                "tags": ["Carritos"],
+                "summary": "Servicio que busca un carrito por id",
+                "description": "Este servicio requiere como parametro el id del carrito que se desea obtener, si se encuentra el carrito se muestra en pantalla, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "idUsuario": 1,
+                                    "idCliente": 1,
+                                    "fechaLimite": "2024-01-20",
+                                    "estado": "Pagado"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Carrito"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/carritos/create": {
+            "post": {
+                "summary": "Servicio para crear un nuevo carrito",
+                "operationId": "createc",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Carrito",
+                        "in": "body",
+                        "description": "Este metodo crea el carrito en el que el usuario podra agregar todos los productos que desee antes de pagar, el estado del carrito se inicializa en pendiente, una vez que se pague el carrito el estado cambia a pagado, como parametros recibe el id del usuario, id del cliente y fecha limite de pago del carrito.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoCarrito"
+                        }
+                    }
+                ],
+                "tags": ["Carritos"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "idUsuario": 1,
+                                    "idCliente": 1,
+                                    "fechaLimite": "2024-01-20"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carritos": {
+            "get": {
+                "tags": [
+                    "Carritos"
+                ],
+                "summary": "Servicio que muestra todos los carritos del sistema.",
+                "operationId": "get2",
+                "description": "Este servicio no requiere ningun parametro, solo ejecutar el servicio y se mostraran todos los carritos que existen en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "idUsuario": 1,
+                                    "idCliente": 1,
+                                    "fechaLimite": "2024-01-20",
+                                    "estado": "Pagado"
+                                },
+                                {
+                                    "id": 2,
+                                    "idUsuario": 2,
+                                    "idCliente": 2,
+                                    "fechaLimite": "2024-01-20",
+                                    "estado": "Pagado"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Carritos"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/delete/{id}": {
+            "delete": {
+                "tags": ["Ventas"],
+                "summary": "Servicio que elimina una venta en especifico",
+                "description": "Este servicio requiere como parametro el ID de la venta que se desea eliminar, si se encuentra la venta se elimina, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/ventas/update/{id}": {
+            "put": {
+                "summary": "Servicio que actualiza la informacion de una venta en especifico",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Este servicio requiere de parametros el ID de la venta a modificar, si se encuentra la venta se muestran los campos que debes modificar, toma en cuenta que todos los campos se actualizaran con la informacion que ingreses o que este por defecto.",
+                        "requiered": true,
+                        "default": 2
+                    },
+                    {
+                        "name": "Venta",
+                        "in": "body",
+                        "description": "Metodo que actualiza una Venta en especifico",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevaVenta"
+                        }
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "201": {
+                        "description": "Exitoso"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/{id}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Servicio que obtiene una venta en especifico",
+                "description": "Este servicio requiere de el ID de la venta que se desea obtener, si se encuentra la venta se muestra en pantalla, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "idProducto": 1,
+                                    "idCliente": 1,
+                                    "idUsuario": 1,
+                                    "fecha": "2020-05-20",
+                                    "descuento": 0
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/ventas/listarventasfecha": {
+            "post": {
+                "summary": "Servicio que lista las ventas hechas en una fecha especifica",
+                "operationId": "create1",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "venta",
+                        "in": "body",
+                        "description": "Este servicio tiene como parametro la fecha en la que se desea buscar las ventas, si se encuentra la fecha se muestran las ventas que se realizaron en esa fecha, en otro caso marca un error",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/VentaF"
+                        }
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "fecha": "2020-05-20"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/create": {
+            "post": {
+                "summary": "Servicio para agregar una nueva venta al sistema",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "venta",
+                        "in": "body",
+                        "description": "Este servicio nos permite agregar una nueva venta al sistema, para poder agregar una venta es necesario que el usuario rellene los campos de la venta, este servicio no es esencial para el funcionamiento del sistema, ya que las ventas se generan automaticamente cuando se paga un carrito",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevaVenta"
+                        }
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "idProducto": 1,
+                                    "idCliente": 1,
+                                    "idUsuario": 1,
+                                    "fecha": "2020-05-20",
+                                    "descuento": 0
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas": {
+            "get": {
+                "tags": [
+                    "Ventas"
+                ],
+                "summary": "Servicio que obtiene todas las ventas que se han realizado dentro del sistema.",
+                "description": "Este servicio no requiere parametros de entrada, solo ejecutar el servicio y se mostraran todas las ventas que se han realizado dentro del sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "idProducto": 1,
+                                    "idCliente": 1,
+                                    "idUsuario": 1,
+                                    "fecha": "2020-05-20",
+                                    "descuento": 0
+                                },
+                                {
+                                    "id": 2,
+                                    "idProducto": 2,
+                                    "idCliente": 2,
+                                    "idUsuario": 2,
+                                    "fecha": "2020-05-20",
+                                    "descuento": 0
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/tallas/delete/{id}": {
+            "delete": {
+                "tags": ["Tallas"],
+                "summary": "Servicio que elimina una talla en especifico",
+                "description": "Este servicio requiere como parametros el ID de la talla que se desea eliminar, si se encuentra la talla se elimina, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/tallas/update/{id}": {
+            "put": {
+                "summary": "Servicio que actualiza la informacion de una talla en especifico",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Este servicio requiere de parametros el ID de la talla a modificar, si se encuentra la talla se muestran los campos que debes modificar, toma en cuenta que todos los campos se actualizaran con la informacion que ingreses o que este por defecto.",
+                        "requiered": true,
+                        "default": 2
+                    },
+                    {
+                        "name": "Talla",
+                        "in": "body",
+                        "description": "Metodo que actualiza una Talla en especifico",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevaTalla"
+                        }
+                    }
+                ],
+                "tags": ["Tallas"],
+                "responses": {
+                    "201": {
+                        "description": "Exitoso"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/tallas/{id}": {
+            "get": {
+                "tags": ["Tallas"],
+                "summary": "Servicio que obtiene una talla de ropa en especifico",
+                "description": "Este servicio requiere como parametro el ID de la talla de ropa que se desea obtener, si se encuentra la talla de ropa se muestra en pantalla, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "talla": "Chica"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Talla"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/tallas/create": {
+            "post": {
+                "summary": "Servicio que crea una nueva talla de ropa dentro del sistema",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Talla",
+                        "in": "body",
+                        "description": "Este servicio nos permite crear una nueva talla de ropa dentro del sistema, es necesario que el usuario indique dentro del campo la nueva talla que agregara. ",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevaTalla"
+                        }
+                    }
+                ],
+                "tags": ["Tallas"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "talla": "Chica"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/tallas": {
+            "get": {
+                "tags": [
+                    "Tallas"
+                ],
+                "summary": "Servicio que muestra todas las tallas de ropa del sistema.",
+                "description": "Este servicio no requiere ningun parametro, solo ejecutar el servicio y se mostraran todas las tallas de ropa que existen en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "talla": "Chica"
+                                },
+                                {
+                                    "id": 2,
+                                    "talla": "Mediana"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Tallas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productos/delete/{id}": {
+            "delete": {
+                "tags": ["Productos"],
+                "summary": "Servicio que elimina algun producto en especifico",
+                "description": "Este servicio requiere como parametros el ID del producto que se desea eliminar, si se encuentra el producto se elimina, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/productos/update/{id}": {
+            "put": {
+                "summary": "Servicio que modifica la informacion de un ID en especifico",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Este servicio requiere de parametros el ID del producto a modificar, si se encuentra el producto se muestran los campos que debes modificar, toma en cuenta que todos los campos se actualizaran con la informacion que ingreses o que este por defecto.",
+                        "requiered": true,
+                        "default": 2
+                    },
+                    {
+                        "name": "Producto",
+                        "in": "body",
+                        "description": "Metodo que actualiza un Producto en especifico",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoProducto"
+                        }
+                    }
+                ],
+                "tags": ["Productos"],
+                "responses": {
+                    "201": {
+                        "description": "Exitoso"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productos/{id}": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Servicio que obtiene informacion de un producto en especifico",
+                "description": "Este servicio requiere de parametro el ID del producto a listar, si se encuentra el producto se muestra en pantalla, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombre": "Vestido Rojo",
+                                    "modelo": "Corto",
+                                    "idTalla": 1,
+                                    "color": "Rojo",
+                                    "precio": 500,
+                                    "cantidad": 10
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Producto"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/productos/create": {
+            "post": {
+                "summary": "Servicio para agregar un nuevo producto al sistema",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Producto",
+                        "in": "body",
+                        "description": "Este servicio nos permite agregar un nuevo producto al sistema, para poder agregar un producto anteriomente se debio agregar una talla dentro de la tabla Tallas, posteriormente se debe rellenar la informacion del producto",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoProducto"
+                        }
+                    }
+                ],
+                "tags": ["Productos"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombre": "Vestido Rojo",
+                                    "modelo": "Corto",
+                                    "idTalla": 1,
+                                    "color": "Rojo",
+                                    "precio": 500,
+                                    "cantidad": 10
+                                },
+                                {
+                                    "nombre": "Vestido Azul",
+                                    "modelo": "Largo",
+                                    "idTalla": 2,
+                                    "color": "Azul",
+                                    "precio": 600,
+                                    "cantidad": 5
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productos": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Servicio que lista todos los productos existente en el sistema",
+                "description": "Este servicio no requiere ningun parametro para obtener todos los productos existentes en el sistema, solo ejecutar el servicio y se mostraran todos los productos que existen en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Vestido Rojo",
+                                    "modelo": "Corto",
+                                    "idTalla": 1,
+                                    "color": "Rojo",
+                                    "precio": 500,
+                                    "cantidad": 10
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Productos"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/roles": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Servicio para obtener todos los roles del sistema",
+                "description": "Este servicio no requiere ningun parametro para poder obtener todos los roles del sistema, solo ejecutar el servicio y se mostraran todos los roles que existen en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Adminisrtrador"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Roles"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/roles/{id}": {
+            "get": {
+                "tags": ["Roles"],
+                "summary": "Servicio para Obtener un rol en especifico",
+                "description": "Este servicio requiere que conozcas el ID del rol en especifico que quieras obtener, si se encuentra el rol se muestra en pantalla, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombreRol": "Moises Ebrahin"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Rol"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/roles/delete/{id}": {
+            "delete": {
+                "tags": ["Roles"],
+                "summary": "Servicio que elimina algun rol en especifico",
+                "description": "Este servicio requiere que conozcas el ID del rol que quieras eliminar del sistema, si se encuentra el rol se elimina del sistema, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/roles/update/{id}": {
+            "put": {
+                "summary": "Servicio que modifica un rol en especifico",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Este servicio requiere que conozcas el ID del rol que deseas modificar, como es informacion sencilla el unico campo que puedes modificar como tal es el nombre del rol, conecto los roles con los usuarios por medio del ID del rol, si modificas el ID del rol podria existir informacion incoherente en el sistema como usuarios con roles que no le pertenecen.",
+                        "requiered": true,
+                        "default": 2
+                    },
+                    {
+                        "name": "Rol",
+                        "in": "body",
+                        "description": "Metodo que actualiza un rol en especifico",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoRol"
+                        }
+                    }
+                ],
+                "tags": ["Roles"],
+                "responses": {
+                    "201": {
+                        "description": "Exitoso"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/roles/create": {
+            "post": {
+                "summary": "Servicio para crear un nuevo rol",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Rol",
+                        "in": "body",
+                        "description": "Este servicio crea los roles que se pueden asignar a los usuarios, es necesario que rellenes todos los campos del rol pues si no se rellenan los campos con los datos correctos podria existir informacion incoherente en el sistema.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoRol"
+                        }
+                    }
+                ],
+                "tags": ["Roles"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombreRol": "Administrador"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/clientes/update/{id}": {
+            "put": {
+                "summary": "Servicio para modificar algun campo de un cliente",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "En este servicio es necesario conocer el id del cliente que deseas modificar, una vez que se conoce el id del cliente se puede modificar cualquier campo del cliente, es necesario que rellenes todos los campos del cliente pues si no se rellenan los campos con los datos correctos podria existir informacion incoherente en el sistema.",
+                        "requiered": true,
+                        "default": 10
+                    },
+                    {
+                        "name": "Cliente",
+                        "in": "body",
+                        "description": "Metodo que actualiza un cliente en especifico",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoCliente"
+                        }
+                    }
+                ],
+                "tags": ["Clientes"],
+                "responses": {
+                    "201": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        },
+        "/api/clientes/delete/{id}": {
+            "delete": {
+                "tags": ["Clientes"],
+                "summary": "Servicio que elimina un cliente del sistema",
+                "description": "En este servicio es necesario saber el id del cliente que deseas eliminar, primero se busca el cliente en el sistema, si se encuentra el cliente se elimina del sistema, en otro caso marca un error.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/clientes/{id}": {
+            "get": {
+                "tags": ["Clientes"],
+                "summary": "Servicio que obtiene informacion de un cliente en especifico",
+                "description": "En este servicio es necesario saber el id del cliente que deseas obtener, una vez que se obtiene el cliente se muestran todos los datos relacionados con el.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Angel Alvarado Torres",
+                                    "direccion": "Colonia Aviacion",
+                                    "telefono": "9541542354",
+                                    "correo": "angel@hotmail.com"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Cliente"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/clientes": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Servicio que lista todos los clientes del sistema",
+                "description": "En este servicio no tienes que enviar ningun parametro, solo debes dar click en el boton de enviar y se mostraran todos los clientes que estan registrados en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Angel Alvarado Torres",
+                                    "direccion": "Colonia Aviacion",
+                                    "telefono": "9541542354",
+                                    "correo": "angel@hotmail.com"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Clientes"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/clientes/create": {
+            "post": {
+                "summary": "Servicio para crear un nuevo cliente",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Cliente",
+                        "in": "body",
+                        "description": "Este servicio requiere que rellene la informacion del cliente que se indica en la solicitud para poder agregarlo al sistema.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoCliente"
+                        }
+                    }
+                ],
+                "tags": ["Clientes"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombre": "Angel Alvarado Torres",
+                                    "direccion": "Colonia Aviacion",
+                                    "telefono": "9541542354",
+                                    "correo": "angel@hotmail.com"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/usuarios": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Servicio que muestra todos los usuarios",
+                "description": "En este servicio no debes proporcionar ningun dato, solo debes dar click en el boton de enviar y se mostraran todos los usuarios que estan registrados en el sistema.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Jose Guadalupe Robles",
+                                    "idRol": 1,
+                                    "usuario": "PEEP2003",
+                                    "contrasena": "Robles2003",
+                                    "telefono": "9541664772"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Usuarios"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/usuarios/create": {
+            "post": {
+                "summary": "Servicio para crear un nuevo usuario",
+                "description": "Este servicio requiere que se le proporcione los datos que se indican en la solicitud para poder crear un nuevo usuario.",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Usuario",
+                        "in": "body",
+                        "description": "Usuario agregado",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombre": "Valeria Martinez",
+                                    "idRol": 2,
+                                    "usuario": "Vxleria2",
+                                    "contrasena": "KSJFJADC",
+                                    "telefono": "9541245125"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/usuarios/{id}": {
+            "get": {
+                "tags": ["Usuarios"],
+                "summary": " Servicio que obtiene informacion de un usuario en especifico",
+                "description": "Para usar este servicio debes proporcionar el id del usuario que deseas obtener, una vez que se obtiene el usuario se muestran todos los datos relacionados con el.",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Moises Ebrahin",
+                                    "correo": "moises@gmail.com",
+                                    "rol": 1,
+                                    "contrasena": "1234"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Usuario"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/usuarios/delete/{id}": {
+            "delete": {
+                "tags": ["Usuarios"],
+                "summary": "Servicio para eliminar algun usuario en especifico",
+                "description": "Este servicio requiere el id del usuario que deseas eliminar, una vez que se elimina el usuario, se eliminan todos los datos relacionados con el.",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "No encontrado"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "requiered": true,
+                        "descripcion": "id...",
+                        "type": "number",
+                        "default": 2
+                    }
+                ]
+            }
+        },
+        "/api/usuarios/update/{id}": {
+            "put": {
+                "summary": "Servicio para modificar algun campo de un usuario",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Este servicio requiere del id del usuario para poder modificarlo, puede modificar los campos que quieras pero debes tener en cuenta que se modifican todos los campos que se indican y debes rellenar todos.",
+                        "requiered": true,
+                        "default": 10
+                    },
+                    {
+                        "name": "Usuario",
+                        "in": "body",
+                        "description": "usuario...",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "201": {
+                        "description": "ok"
+                    },
+                    "403": {
+                        "description": "prohibido"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "NuevoPagoCarrito": {
+            "type": "object",
+            "properties": {
+                "idCarrito": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el carrito"
+                },
+                "descuento": {
+                    "type": "number",
+                    "description": "Descuento que se le aplicara al carrito"
+                },
+                "fecha": {
+                    "type": "string",
+                    "description": "Fecha en la que se realizo el pago"
+                }
+            }
+        },
+        "VentaF": {
+            "type": "object",
+            "properties": {
+                "fecha": {
+                    "type": "string",
+                    "description": "Fecha de la venta"
+                }
+            }
+        },
+        "ContenidoCarrito": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el carrito"
+                },
+                "estado": {
+                    "type": "string",
+                    "description": "Estado en el que se encuentra el carrito"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del producto"
+                },
+                "modelo": {
+                    "type": "string",
+                    "description": "Modelo del producto"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad del producto"
+                },
+                "precio": {
+                    "type": "number",
+                    "description": "Precio del producto"
+                }
+            }
+        },
+        "ListarCarrito": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/ContenidoCarrito"
+            }
+        },
+        "CancelarCarrito": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el carrito"
+                }
+            }
+        },
+        "NuevocarritoProducto": {
+            "type": "object",
+            "properties": {
+                "idCarrito": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el carrito"
+                },
+                "idProducto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad del producto"
+                }
+            }
+        },
+        "Estado": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el estado"
+                },
+                "estado": {
+                    "type": "string",
+                    "description": "Nombre del estado"
+                }
+            }
+        },
+        "Estados": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Estado"
+            }
+        },
+        "NuevoEstado": {
+            "type": "object",
+            "properties": {
+                "estado": {
+                    "type": "string",
+                    "description": "Nombre del estado"
+                }
+            }
+        },
+        "Carrito": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al carrito"
+                },
+                "idUsuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "idCliente": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al cliente"
+                },
+                "fechaLimite": {
+                    "type": "string",
+                    "description": "Fecha limite del carrito"
+                }
+            }
+        },
+        "Carritos": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Carrito"
+            }
+        },
+        "NuevoCarrito": {
+            "type": "object",
+            "properties": {
+                "idUsuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "idCliente": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al cliente"
+                },
+                "fechaLimite": {
+                    "type": "string",
+                    "description": "Fecha limite del carrito"
+                }
+            }
+        },
+        "Venta": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar la venta"
+                },
+                "idProducto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto"
+                },
+                "idCliente": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al cliente"
+                },
+                "idUsuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "fecha": {
+                    "type": "string",
+                    "description": "Fecha de la venta"
+                },
+                "descuento": {
+                    "type": "number",
+                    "description": "Descuento de la venta"
+                }
+            }
+        },
+        "Ventas": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Venta"
+            }
+        },
+        "NuevaVenta": {
+            "type": "object",
+            "properties": {
+                "idProducto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto"
+                },
+                "idCliente": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al cliente"
+                },
+                "idUsuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "fecha": {
+                    "type": "string",
+                    "description": "Fecha de la venta"
+                },
+                "descuento": {
+                    "type": "number",
+                    "description": "Descuento de la venta"
+                }
+            }
+        },
+        "Talla": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar la talla"
+                },
+                "talla": {
+                    "type": "string",
+                    "description": "Talla del producto"
+                }
+            }
+        },
+        "Tallas": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Talla"
+            }
+        },
+        "NuevaTalla": {
+            "type": "object",
+            "properties": {
+                "talla": {
+                    "type": "string",
+                    "description": "Talla del producto"
+                }
+            }
+        },
+        "Producto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al producto"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del producto"
+                },
+                "modelo": {
+                    "type": "string",
+                    "description": "Modelo del producto"
+                },
+                "idTalla": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar la talla del producto"
+                },
+                "color": {
+                    "type": "string",
+                    "description": "Color del producto"
+                },
+                "precio": {
+                    "type": "number",
+                    "description": "Precio del producto"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad del producto"
+                }
+            }
+        },
+        "Productos": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Producto"
+            }
+        },
+        "NuevoProducto": {
+            "type": "object",
+            "properties": {
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del producto"
+                },
+                "modelo": {
+                    "type": "string",
+                    "description": "Modelo del producto"
+                },
+                "idTalla": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar la talla del producto"
+                },
+                "color": {
+                    "type": "string",
+                    "description": "Color del producto"
+                },
+                "precio": {
+                    "type": "number",
+                    "description": "Precio del producto"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad del producto"
+                }
+            }
+        },
+        "Cliente": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al cliente"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del cliente"
+                },
+                "direccion": {
+                    "type": "string",
+                    "description": "Direccion del cliente"
+                },
+                "telefono": {
+                    "type": "string",
+                    "description": "Telefono del cliente"
+                },
+                "correo": {
+                    "type": "string",
+                    "description": "Correo del cliente"
+                }
+            }
+        },
+        "Clientes": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Cliente"
+            }
+        },
+        "NuevoCliente": {
+            "type": "object",
+            "properties": {
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del cliente"
+                },
+                "direccion": {
+                    "type": "string",
+                    "description": "Direccion del cliente"
+                },
+                "telefono": {
+                    "type": "string",
+                    "description": "Telefono del cliente"
+                },
+                "correo": {
+                    "type": "string",
+                    "description": "Correo del cliente"
+                }
+            }
+        },
+        "Usuario": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
+                },
+                "idRol": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el rol del usuario"
+                },
+                "usuario": {
+                    "type": "string",
+                    "description": "Correo del usuario"
+                },
+                "contrasena": {
+                    "type": "string",
+                    "description": "Contrasena del usuario"
+                },
+                "telefono": {
+                    "type": "string",
+                    "description": "Telefono del usuario"
+                }
+            }
+        },
+        "Usuarios": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Usuario"
+            }
+        },
+        "NuevoUsuario": {
+            "type": "object",
+            "properties": {
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
+                },
+                "idRol": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el rol del usuario"
+                },
+                "usuario": {
+                    "type": "string",
+                    "description": "Correo del usuario"
+                },
+                "contrasena": {
+                    "type": "string",
+                    "description": "Contrasena del usuario"
+                },
+                "telefono": {
+                    "type": "string",
+                    "description": "Telefono del usuario"
+                }
+            }
+        },
+        "Rol": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el rol"
+                },
+                "nombreRol": {
+                    "type": "string",
+                    "description": "Nombre del rol"
+                }
+            }
+        },
+        "Roles": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Rol"
+            }
+        },
+        "NuevoRol": {
+            "type": "object",
+            "properties": {
+                "nombreRol": {
+                    "type": "string",
+                    "description": "Nombre del rol"
+                }
+            }
+        }
+    }
+}
