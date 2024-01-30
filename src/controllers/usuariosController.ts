@@ -38,13 +38,13 @@ res.json(resp);
 }
 
 public async ValidarU(req: Request, res: Response ): Promise<void>{
-    const parametros=req.body;
-    const consulta =`SELECT rol FROM usuarios WHERE correo ='${parametros.correo}'and contrasena = '${parametros.contrasena}'`;
+    const {usuario,password}=req.params;
+    const consulta =`SELECT idRol FROM usuarios WHERE usuario ='${usuario}'and contrasena = '${password}'`;
     const resp= await pool.query(consulta);
     if(resp.length > 0){
         res.json(resp);
     }else{
-        res.json({"rol":"-1"});
+        res.json({"idRol":"-1"});
     }
 }
 

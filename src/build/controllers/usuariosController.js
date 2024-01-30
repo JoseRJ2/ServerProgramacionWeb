@@ -57,14 +57,14 @@ class UsuariosController {
     }
     ValidarU(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const parametros = req.body;
-            const consulta = `SELECT rol FROM usuarios WHERE correo ='${parametros.correo}'and contrasena = '${parametros.contrasena}'`;
+            const { usuario, password } = req.params;
+            const consulta = `SELECT idRol FROM usuarios WHERE usuario ='${usuario}'and contrasena = '${password}'`;
             const resp = yield database_1.default.query(consulta);
             if (resp.length > 0) {
                 res.json(resp);
             }
             else {
-                res.json({ "rol": "-1" });
+                res.json({ "idRol": "-1" });
             }
         });
     }

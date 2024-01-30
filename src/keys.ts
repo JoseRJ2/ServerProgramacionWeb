@@ -1,3 +1,12 @@
+/*export default{
+    database:{
+        host:'localhost',
+        port: 3306,
+        user:'root',
+        password:'',
+        database:'bazar'
+    }
+}*/
 export default{
     database:{
         host:'ls-704878f4afe9ac88497d45b27ae6def768b40726.c7xbbvdviovo.us-east-1.rds.amazonaws.com',
