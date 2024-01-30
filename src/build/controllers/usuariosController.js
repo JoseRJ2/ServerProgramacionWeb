@@ -57,8 +57,8 @@ class UsuariosController {
     }
     ValidarU(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { usuario, password } = req.params;
-            const consulta = `SELECT idRol FROM usuarios WHERE usuario ='${usuario}'and contrasena = '${password}'`;
+            const parametros = req.body;
+            const consulta = `SELECT idRol FROM usuarios WHERE usuario ='${parametros.usuario}'and contrasena = '${parametros.contrasena}'`;
             const resp = yield database_1.default.query(consulta);
             if (resp.length > 0) {
                 res.json(resp);
