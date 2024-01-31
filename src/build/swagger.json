@@ -55,7 +55,7 @@
         "application/json"
     ],
     "paths": {
-        "/api/carritos/VerificarUsuario": {
+        "/api/usuarios/VerificarUsuario": {
             "post": {
                 "summary": "Servicio para verificar si un usuario existe",
                 "operationId": "cancelar",
