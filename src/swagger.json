@@ -70,7 +70,7 @@
                         "description":"Este servicio nos permite verificar si un usuario existe en el sistema enviando su correo y contraseña, si el usuario existe se muestra en pantalla su idRol, en otro caso marca un error.",
                         "requiered":true,
                         "schema":{
-                            "$ref":"#/definitions/VerificarUsuario"
+                            "$ref":"#/definitions/VerificarU"
                         } 
                     }
                 ],
@@ -1832,7 +1832,7 @@
                 "$ref": "#/definitions/Carrito"
             }
         },
-        "VerificarUsuario":{
+        "VerificarU":{
             "type": "object",
             "properties": {
                 "usuario": {
