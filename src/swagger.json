@@ -74,15 +74,15 @@
                         } 
                     }
                 ],
-                "tags":["Carritos"],
+                "tags":["Usuarios"],
                 "responses":{
                     "200":{
                         "description":"respuesta correcta",
                         "examples": {
                             "application/json": [
                                 {
-                                    "usuario":1,
-                                    "contrasena":"1234"
+                                    "usuario":"Vxleria2",
+                                    "contrasena":"HOLAP:)"
                                 } 
                             ]
                         }
