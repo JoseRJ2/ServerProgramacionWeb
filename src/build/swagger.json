@@ -55,6 +55,43 @@
         "application/json"
     ],
     "paths": {
+        "/api/carritos/VerificarUsuario": {
+            "post": {
+                "summary": "Servicio para verificar si un usuario existe",
+                "operationId": "cancelar",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Verificar usuario",
+                        "in": "body",
+                        "description": "Este servicio nos permite verificar si un usuario existe en el sistema enviando su correo y contraseña, si el usuario existe se muestra en pantalla su idRol, en otro caso marca un error.",
+                        "requiered": true,
+                        "schema": {
+                            "$ref": "#/definitions/VerificarUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Carritos"],
+                "responses": {
+                    "200": {
+                        "description": "respuesta correcta",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "usuario": 1,
+                                    "contrasena": "1234"
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
         "/api/carritos/listarcarrito/{id}": {
             "get": {
                 "tags": ["Carritos"],
@@ -1783,6 +1820,19 @@
             "type": "array",
             "items": {
                 "$ref": "#/definitions/Carrito"
+            }
+        },
+        "VerificarUsuario": {
+            "type": "object",
+            "properties": {
+                "usuario": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
+                },
+                "contrasena": {
+                    "type": "string",
+                    "description": "Contrasena del usuario"
+                }
             }
         },
         "NuevoCarrito": {
