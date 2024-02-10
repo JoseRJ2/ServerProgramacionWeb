@@ -675,11 +675,10 @@
                             "application/json":[
                                 {
                                     "id":1,
-                                    "idProducto":1,
-                                    "idCliente":1,
-                                    "idUsuario":1,
-                                    "fecha":"2020-05-20",
-                                    "descuento":0
+                                    "idPagoCarrito":1,
+                                    "Cliente":"Pedro Perez",
+                                    "Usuario":"Valeri Martinez",
+                                    "fecha":"2020-05-20"
                                 }
                             ]
                         },
@@ -764,11 +763,10 @@
                         "examples": {
                             "application/json": [
                                 {
-                                    "idProducto":1,
-                                    "idCliente":1,
-                                    "idUsuario":1,
-                                    "fecha":"2020-05-20",
-                                    "descuento":0
+                                    "idPagoCarrito":1,
+                                    "Cliente":"Juan Perez",
+                                    "Usuario":"Valeri Martinez",
+                                    "fecha":"2020-05-20"
                                 } 
                             ]
                         }
@@ -793,19 +791,17 @@
                             "application/json": [
                                 {
                                     "id":1,
-                                    "idProducto":1,
-                                    "idCliente":1,
-                                    "idUsuario":1,
-                                    "fecha":"2020-05-20",
-                                    "descuento":0
+                                    "idPagoCarrito":1,
+                                    "Cliente":"Pedro Perez",
+                                    "Usuario":"Valeri Martinez",
+                                    "fecha":"2020-05-20"
                                 },
                                 {
                                     "id":2,
-                                    "idProducto":2,
-                                    "idCliente":2,
-                                    "idUsuario":2,
-                                    "fecha":"2020-05-20",
-                                    "descuento":0
+                                    "idPagoCarrito":2,
+                                    "Cliente":"Juan Perez",
+                                    "Usuario":"Juan Martinez",
+                                    "fecha":"2020-05-20"
                                 }
                             ]
                         },
@@ -1869,25 +1865,21 @@
                     "type": "number",
                     "description": "Codigo que permite identificar la venta"
                 },
-                "idProducto": {
+                "idPagoCarrito": {
                     "type": "number",
-                    "description": "Codigo que permite identificar el producto"
+                    "description": "Codigo que permite identificar el pago del carrito"
                 },
-                "idCliente": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar al cliente"
+                "Cliente": {
+                    "type": "string",
+                    "description": "Nombre del cliente"
                 },
-                "idUsuario": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar al usuario"
+                "Usuario": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
                 },
                 "fecha": {
                     "type": "string",
                     "description": "Fecha de la venta"
-                },
-                "descuento": {
-                    "type": "number",
-                    "description": "Descuento de la venta"
                 }
             }
         },
@@ -1900,25 +1892,21 @@
         "NuevaVenta": {
             "type": "object",
             "properties": {
-                "idProducto": {
+                "idPagoCarrito": {
                     "type": "number",
-                    "description": "Codigo que permite identificar el producto"
+                    "description": "Codigo que permite identificar el pago del carrito"
                 },
-                "idCliente": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar al cliente"
+                "Cliente": {
+                    "type": "string",
+                    "description": "Nombre del cliente"
                 },
-                "idUsuario": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar al usuario"
+                "Usuario": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
                 },
                 "fecha": {
                     "type": "string",
                     "description": "Fecha de la venta"
-                },
-                "descuento": {
-                    "type": "number",
-                    "description": "Descuento de la venta"
                 }
             }
         },
