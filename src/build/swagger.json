@@ -1052,7 +1052,7 @@
                                 {
                                     "nombre": "Vestido Rojo",
                                     "modelo": "Corto",
-                                    "idTalla": 1,
+                                    "Talla": "Grande",
                                     "color": "Rojo",
                                     "precio": 500,
                                     "cantidad": 10
@@ -1106,7 +1106,7 @@
                                 {
                                     "nombre": "Vestido Rojo",
                                     "modelo": "Corto",
-                                    "idTalla": 1,
+                                    "Talla": "Mediana",
                                     "color": "Rojo",
                                     "precio": 500,
                                     "cantidad": 10
@@ -1114,7 +1114,7 @@
                                 {
                                     "nombre": "Vestido Azul",
                                     "modelo": "Largo",
-                                    "idTalla": 2,
+                                    "Talla": "Grande",
                                     "color": "Azul",
                                     "precio": 600,
                                     "cantidad": 5
@@ -1144,7 +1144,7 @@
                                     "id": 1,
                                     "nombre": "Vestido Rojo",
                                     "modelo": "Corto",
-                                    "idTalla": 1,
+                                    "Talla": "Grande",
                                     "color": "Rojo",
                                     "precio": 500,
                                     "cantidad": 10
@@ -1513,7 +1513,7 @@
                                 {
                                     "id": 1,
                                     "nombre": "Jose Guadalupe Robles",
-                                    "idRol": 1,
+                                    "Rol": "Vendedor",
                                     "usuario": "PEEP2003",
                                     "contrasena": "Robles2003",
                                     "telefono": "9541664772"
@@ -1557,7 +1557,7 @@
                             "application/json": [
                                 {
                                     "nombre": "Valeria Martinez",
-                                    "idRol": 2,
+                                    "Rol": "Vendedor",
                                     "usuario": "Vxleria2",
                                     "contrasena": "KSJFJADC",
                                     "telefono": "9541245125"
@@ -1943,9 +1943,9 @@
                     "type": "string",
                     "description": "Modelo del producto"
                 },
-                "idTalla": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar la talla del producto"
+                "Talla": {
+                    "type": "string",
+                    "description": "Nombre de la talla del producto"
                 },
                 "color": {
                     "type": "string",
@@ -1978,9 +1978,9 @@
                     "type": "string",
                     "description": "Modelo del producto"
                 },
-                "idTalla": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar la talla del producto"
+                "Talla": {
+                    "type": "string",
+                    "description": "Nombre de la talla del producto"
                 },
                 "color": {
                     "type": "string",
@@ -2059,9 +2059,9 @@
                     "type": "string",
                     "description": "Nombre del usuario"
                 },
-                "idRol": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar el rol del usuario"
+                "Rol": {
+                    "type": "string",
+                    "description": "Rol que tiene el usuario"
                 },
                 "usuario": {
                     "type": "string",
@@ -2090,9 +2090,9 @@
                     "type": "string",
                     "description": "Nombre del usuario"
                 },
-                "idRol": {
-                    "type": "number",
-                    "description": "Codigo que permite identificar el rol del usuario"
+                "Rol": {
+                    "type": "string",
+                    "description": "Rol que tiene el usuario"
                 },
                 "usuario": {
                     "type": "string",
