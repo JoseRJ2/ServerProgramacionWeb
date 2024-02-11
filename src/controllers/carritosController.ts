@@ -3,13 +3,13 @@ import pool from '../database';
 
 class CarritosController{
 public async list(req: Request, res: Response ): Promise<void>{
-    const respuesta = await pool.query('SELECT * FROM carritos');
+    const respuesta = await pool.query(`SELECT carritos.id, usuarios.nombre as Usuario, clientes.nombre as Cliente, carritos.fechaLimite, estados.estado as estado FROM carritos, usuarios, estados, clientes WHERE usuarios.id = carritos.idUsuario AND clientes.id = carritos.idCliente AND estados.id = carritos.estado`);
     res.json( respuesta );
 }
 
 public async listOne(req: Request, res: Response): Promise <void>{
 const {id} = req.params;
-const respuesta = await pool.query('SELECT * FROM carritos WHERE id = ?', [id]);
+const respuesta = await pool.query('SELECT carritos.id, usuarios.nombre as Usuario, clientes.nombre as Cliente, carritos.fechaLimite, estados.estado as estado FROM carritos, usuarios, estados, clientes WHERE usuarios.id = carritos.idUsuario AND clientes.id = carritos.idCliente AND estados.id = carritos.estado AND carritos.id = ?', [id]);
 if(respuesta.length>0){
 res.json(respuesta[0]);
 return ;
@@ -18,8 +18,9 @@ res.status(404).json({'mensaje': 'carrito no encontrado'});
 }
 
 public async create(req: Request, res: Response): Promise<void> {
-    console.log(req.body)
-    const resp = await pool.query(`INSERT INTO carritos (idUsuario, idCliente, fechaLimite, estado) VALUES ('${req.body.idUsuario}', '${req.body.idCliente}', '${req.body.fechaLimite}', ${6})`);
+    const ConsultaUsuario = await pool.query(`SELECT usuarios.id as Usuario FROM usuarios WHERE usuarios.nombre = '${req.body.Usuario}'`);
+    const ConsultaCliente = await pool.query(`SELECT clientes.id as Cliente FROM clientes WHERE clientes.nombre = '${req.body.Cliente}'`);
+    const resp = await pool.query(`INSERT INTO carritos (idUsuario, idCliente, fechaLimite, estado) VALUES ('${ConsultaUsuario[0].Usuario}', '${ConsultaCliente[0].Cliente}', '${req.body.fechaLimite}', ${6})`);
     res.json(resp);
 }
 
@@ -40,9 +41,11 @@ res.json(resp);
 
 public async agregar(req: Request, res: Response): Promise<void> {
     const parametros = req.body;
+    console.log(req.body.Producto)
+    const consultaIdProducto = await pool.query(`SELECT productos.id as IdProducto FROM productos WHERE productos.nombre = '${req.body.Producto}'`)
     const consulta1=`SElECT * FROM carritos WHERE id='${parametros.idCarrito}'`;
-    const consulta2=`SElECT * FROM productos WHERE id='${parametros.idProducto}'`;
-    const consulta3=`SElECT cantidad FROM productos WHERE id='${parametros.idProducto}'`;
+    const consulta2=`SElECT * FROM productos WHERE id='${consultaIdProducto[0].IdProducto}'`;
+    const consulta3=`SElECT cantidad FROM productos WHERE id='${consultaIdProducto[0].IdProducto}'`;
     const resp1= await pool.query(consulta1);
     const resp2= await pool.query(consulta2);
     const res3= await pool.query(consulta3);
@@ -50,8 +53,8 @@ public async agregar(req: Request, res: Response): Promise<void> {
         if(resp2.length > 0){
             if(res3[0].cantidad >= parametros.cantidad){
                 const cantidadNueva=res3[0].cantidad-parametros.cantidad;
-                const respu1 = await pool.query('INSERT INTO carritos_productos set ?', [req.body]);
-                const respu2 = await pool.query('UPDATE productos SET cantidad = ? WHERE id = ?', [cantidadNueva,parametros.idProducto]) 
+                const respu1 = await pool.query(`INSERT INTO carritos_productos (idCarrito, idProducto, cantidad) VALUES (${req.body.idCarrito}, ${consultaIdProducto[0].IdProducto}, ${req.body.cantidad});`);
+                const respu2 = await pool.query('UPDATE productos SET cantidad = ? WHERE id = ?', [cantidadNueva,consultaIdProducto[0].IdProducto]) 
                 const combinedResponse = {
                     respuesta1: respu1,
                     respuesta2: respu2

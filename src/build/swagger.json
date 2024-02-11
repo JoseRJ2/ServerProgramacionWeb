@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "bazardonaji.onrender.com",
+    "host": "localhost:3000",
     "basePath": "",
     "tags": [
         {
@@ -46,7 +46,7 @@
         }
     ],
     "schemes": [
-        "https"
+        "http"
     ],
     "consumes": [
         "application/json"

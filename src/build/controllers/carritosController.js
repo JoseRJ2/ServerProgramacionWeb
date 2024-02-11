@@ -17,14 +17,14 @@ const database_1 = __importDefault(require("../database"));
 class CarritosController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const respuesta = yield database_1.default.query('SELECT * FROM carritos');
+            const respuesta = yield database_1.default.query(`SELECT carritos.id, usuarios.nombre as Usuario, clientes.nombre as Cliente, carritos.fechaLimite, estados.estado as estado FROM carritos, usuarios, estados, clientes WHERE usuarios.id = carritos.idUsuario AND clientes.id = carritos.idCliente AND estados.id = carritos.estado`);
             res.json(respuesta);
         });
     }
     listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const respuesta = yield database_1.default.query('SELECT * FROM carritos WHERE id = ?', [id]);
+            const respuesta = yield database_1.default.query('SELECT carritos.id, usuarios.nombre as Usuario, clientes.nombre as Cliente, carritos.fechaLimite, estados.estado as estado FROM carritos, usuarios, estados, clientes WHERE usuarios.id = carritos.idUsuario AND clientes.id = carritos.idCliente AND estados.id = carritos.estado AND carritos.id = ?', [id]);
             if (respuesta.length > 0) {
                 res.json(respuesta[0]);
                 return;
@@ -34,8 +34,9 @@ class CarritosController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
-            const resp = yield database_1.default.query(`INSERT INTO carritos (idUsuario, idCliente, fechaLimite, estado) VALUES ('${req.body.idUsuario}', '${req.body.idCliente}', '${req.body.fechaLimite}', ${6})`);
+            const ConsultaUsuario = yield database_1.default.query(`SELECT usuarios.id as Usuario FROM usuarios WHERE usuarios.nombre = '${req.body.Usuario}'`);
+            const ConsultaCliente = yield database_1.default.query(`SELECT clientes.id as Cliente FROM clientes WHERE clientes.nombre = '${req.body.Cliente}'`);
+            const resp = yield database_1.default.query(`INSERT INTO carritos (idUsuario, idCliente, fechaLimite, estado) VALUES ('${ConsultaUsuario[0].Usuario}', '${ConsultaCliente[0].Cliente}', '${req.body.fechaLimite}', ${6})`);
             res.json(resp);
         });
     }
@@ -58,9 +59,11 @@ class CarritosController {
     agregar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const parametros = req.body;
+            console.log(req.body.Producto);
+            const consultaIdProducto = yield database_1.default.query(`SELECT productos.id as IdProducto FROM productos WHERE productos.nombre = '${req.body.Producto}'`);
             const consulta1 = `SElECT * FROM carritos WHERE id='${parametros.idCarrito}'`;
-            const consulta2 = `SElECT * FROM productos WHERE id='${parametros.idProducto}'`;
-            const consulta3 = `SElECT cantidad FROM productos WHERE id='${parametros.idProducto}'`;
+            const consulta2 = `SElECT * FROM productos WHERE id='${consultaIdProducto[0].IdProducto}'`;
+            const consulta3 = `SElECT cantidad FROM productos WHERE id='${consultaIdProducto[0].IdProducto}'`;
             const resp1 = yield database_1.default.query(consulta1);
             const resp2 = yield database_1.default.query(consulta2);
             const res3 = yield database_1.default.query(consulta3);
@@ -68,8 +71,8 @@ class CarritosController {
                 if (resp2.length > 0) {
                     if (res3[0].cantidad >= parametros.cantidad) {
                         const cantidadNueva = res3[0].cantidad - parametros.cantidad;
-                        const respu1 = yield database_1.default.query('INSERT INTO carritos_productos set ?', [req.body]);
-                        const respu2 = yield database_1.default.query('UPDATE productos SET cantidad = ? WHERE id = ?', [cantidadNueva, parametros.idProducto]);
+                        const respu1 = yield database_1.default.query(`INSERT INTO carritos_productos (idCarrito, idProducto, cantidad) VALUES (${req.body.idCarrito}, ${consultaIdProducto[0].IdProducto}, ${req.body.cantidad});`);
+                        const respu2 = yield database_1.default.query('UPDATE productos SET cantidad = ? WHERE id = ?', [cantidadNueva, consultaIdProducto[0].IdProducto]);
                         const combinedResponse = {
                             respuesta1: respu1,
                             respuesta2: respu2
