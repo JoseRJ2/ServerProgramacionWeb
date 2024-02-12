@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /*export default{
     database:{
         host:'localhost',
@@ -9,6 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
         database:'bazar'
     }
 }*/
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     database: {
         host: 'ls-704878f4afe9ac88497d45b27ae6def768b40726.c7xbbvdviovo.us-east-1.rds.amazonaws.com',
